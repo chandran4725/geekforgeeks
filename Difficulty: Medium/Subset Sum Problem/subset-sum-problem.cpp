@@ -1,32 +1,33 @@
 class Solution {
-  public:
-    bool findSum(int ind,int target,vector<int> &arr,vector<vector<int>> &dp)
-    {
-        if(target < 0) return false;
-        
-        if(target == 0)
-        {
-            return true;
-        }
-        
-        if(ind >= arr.size()) return false;
-        
-        if(dp[ind][target] != -1) return dp[ind][target];
-        
-        bool left = false;
-        
-        if(arr[ind] <= target)
-        {
-            left = findSum(ind+1,target-arr[ind],arr,dp);
-        }
-        
-        bool right = findSum(ind+1,target,arr,dp);
-        
-        return dp[ind][target] = left || right;
-    }
+public:
     bool isSubsetSum(vector<int>& arr, int sum) {
-        // code here
-        vector<vector<int>> dp(arr.size(),vector<int>(sum+1,-1));
-        return findSum(0,sum,arr,dp);
+        int n = arr.size();
+
+        // dp[i][s] = can we make sum s using first i elements
+        vector<vector<bool>> dp(n + 1, vector<bool>(sum + 1, false));
+
+        // Base case: sum = 0 is always possible
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = true;
+        }
+
+        // Fill the table
+        for (int i = 1; i <= n; i++) {
+            for (int s = 1; s <= sum; s++) {
+
+                // Not take current element
+                bool notTake = dp[i - 1][s];
+
+                // Take current element (if possible)
+                bool take = false;
+                if (arr[i - 1] <= s) {
+                    take = dp[i - 1][s - arr[i - 1]];
+                }
+
+                dp[i][s] = take || notTake;
+            }
+        }
+
+        return dp[n][sum];
     }
 };
