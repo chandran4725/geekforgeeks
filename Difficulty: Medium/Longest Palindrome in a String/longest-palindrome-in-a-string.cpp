@@ -1,37 +1,37 @@
 class Solution {
   public:
-    
-    string longestPalindrome(string &S) {
-        int start = 0, end = 0;
-        int low,high;
-        for(int i = 0; i < S.length(); i++){
-        // odd part
-             low = i - 1;
-            high = i;
-            while(low>=0 && high<S.length() && S[low] == S[high]){
-            
-                if(high - low + 1 > end){
-                end = high - low + 1; //current longest pallindrome length
-                start = low;
-            }
-            low--;
-            high++;
-        }
-        // Even part
-         low = i - 1;
-         high = i + 1;
-        while(low>=0 && high<S.length() && S[low] == S[high]){
-            
-            if(high - low + 1 > end){
-                end = high - low + 1; //current longest pallindrome length
-                start = low;
-            }
-            low--;
-            high++;
+  
+    int expand(string &s,int left,int right)
+    {
+        while(left >=0 && right < s.size() && s[left] == s[right])
+        {
+            left--;
+            right++;
         }
         
+        return (right-1) - (left+1) + 1;
+    }
+    
+    string longestPalindrome(string &s) {
+        
+        int n = s.size();
+        int start = 0,end = 0;
+        
+        for(int i=0;i<n;i++)
+        {
+            int len1 = expand(s,i,i);
+            int len2 = expand(s,i,i+1);
+            
+            int len = max(len1,len2);
+            
+            if(len > end-start+1)
+            {
+                start = i - (len-1)/2;
+                end = i+len/2;
+            }
         }
-        if(end == 0)return S.substr(start,1); // no pallindrome at all
-        return S.substr(start,end);
+        
+        return s.substr(start,end-start+1);
+        
     }
 };
