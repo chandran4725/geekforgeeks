@@ -1,13 +1,14 @@
 class Solution {
   public:
-    string findLargest(vector<int> &arr) {
-        // code here
-        auto myComparator = [](int &a,int &b){
+        static bool myComparator(int &a,int &b){
             
             string s1 = to_string(a);
             string s2 = to_string(b);
             return (s1+s2) > (s2+s1);
         };
+    string findLargest(vector<int> &arr) {
+        // code here
+        
         
         sort(arr.begin(),arr.end(),myComparator);
         
